@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 0.1.0 - 2020-03-15
 ### Forked the Smoke Hotbox
 
+### Added
+- more information to contributing.md
+
 ### Changed
 - scripts and files to pull correct binaries
 - scripts and files to use "tackle" instead of "hotbox"
+
+### Removed
+- Website files
