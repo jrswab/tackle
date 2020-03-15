@@ -49,7 +49,7 @@ if [ "$access" = "n" ]; then
     if [ "$access2" = "n" ]; then
         printf "\n%s""${green}"
         printf "Please check your Root password and try again.\n"
-        printf "If the problem persists, leave this SSH session open and message the support channel in the Hotbox Discord server.%s\n""${nc}"
+        printf "If the problem persists, leave this SSH session open and message the support channel in the Tackle Discord server.%s\n""${nc}"
         exit 1
     fi
 fi
@@ -62,7 +62,7 @@ systemctl enable docker
 # user has access:
 username=""
 printf "%s""${green}"
-printf "The Hotbox can not be run as root.\n"
+printf "Tackle can not be run as root.\n"
 printf "So let's create a new user.\n"
 printf "\n"
 

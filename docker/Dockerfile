@@ -32,7 +32,7 @@ WORKDIR /home/witness/
 
 COPY config/ /home/witness/.config/
 COPY wallet.sh /home/witness/
-COPY smoked.sh /home/witness/
+COPY whaled.sh /home/witness/
 COPY config.sh /home/witness/
 COPY update.sh /home/witness/
 
