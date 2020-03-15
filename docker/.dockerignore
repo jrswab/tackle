@@ -1,0 +1,4 @@
+smoke/*
+smoke/
+buildDocker.sh
+push.sh

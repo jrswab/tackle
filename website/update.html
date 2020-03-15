@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+    <head>
+        <title>
+            Hotbox for Smoke.io
+        </title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <img src="logo.png" width="100px" />
+    <body>
+        <h1 id="hotbox-version-2-0">Hotbox Version 2.0</h1>
+        <p>The goal of this project is to make running a witness for smoke.io more predictable and reliable.</p>
+        <p>If you have any ideas on how to make this better please let me know or submit a pull request.</p>
+        <h2 id="contents-">Contents:</h2>
+        <ul>
+        <li><a href="new.html">Starting a New Witness</a></li>
+        <li><a href="updating.html">Update a Current Hotbox</a></li>
+        <li><a href="mirgate.html">Move a Non-Hotbox Witness to the Hotbox</a></li>
+        </ul>
+        <h2 id="updating-a-current-hotbox-instance">Updating a Current Hotbox Instance</h2>
+        <p><strong><em><a href="https://www.bitchute.com/video/XyaHGHj7x9lV/">Watch this Bitchute video!</a></em></strong></p>
+        <p>
+            Jump to a section:
+            <ul>
+                <li><a href="#to-detach-from-the-hotbox">Detaching From the Hotbox</a></li>
+                <li><a href="#to-enter-the-hotbox">To enter the Hotbox</a></li>
+                <li><a href="#check-if-hotbox-is-running">Check to make sure the Hotbox is running</a></li>
+            </ul>
+        </p>
+        <ol>
+        <li>Disable your witness<ul>
+        <li><code>update_witness &quot;username&quot; &quot;url&quot; &quot;SMK1111111111111111111111111111111114T1Anm&quot; {} true</code></li>
+        <li>Replace <code>username</code> and <code>url</code> with your information.</li>
+        <li>Copy and paste the command into the CLI_Wallet.</li>
+        <li>Wait for it to broadcast. You will see some yellow words scroll by and then a group of grayish-white text.</li>
+        </ul>
+        </li>
+        <li>Close your wallet with <code>ctrl+d</code> if open.</li>
+        <li>Shut down smoked with <code>ctrl+c</code>.</li>
+        <li>Make a copy of your smoke directory:<ul>
+        <li><code>cp -r ~/hotbox/smoke ~/smokebackup</code></li>
+        </ul>
+        </li>
+        <li>Pull the Hotbox Git repository:<ul>
+        <li><code>cd</code> - this is to move into your home directory</li>
+        <li>Remove old rep <code>sudo rm -r ~/hotbox</code> (Make sure to double check that your config.ini file is backed up!)</li>
+        <li><code>git clone https://gitlab.com/jrswab/hotbox</code></li>
+        </ul>
+        </li>
+        <li><code>docker pull jrswab/hotbox</code></li>
+        <li><code>./run.sh</code><ul>
+        <li>To specify ports just add them to the end eg. <code>./run.sh 20001 28090</code></li>
+        <li>If no ports are specified the script will expose port 2001 to 20001 and port 8090 to 28090.</li>
+        <li>If you have a firewall make sure to open the ports used.</li>
+        </ul>
+        </li>
+        <li><code>./smoked.sh</code></li>
+        <li><code>ctrl+b c</code> to make a new Tmux window.</li>
+        <li><code>./wallet.sh</code></li>
+        <li>Unlock the wallet with your secret passphrase.</li>
+        <li>Re-enable your witness.</li>
+        <li>Re-lock your wallet (it seems smoked will run fine even if the wallet is locked and it&#39;s safer)</li>
+        </ol>
+
+        <h2 id="to-detach-from-the-hotbox">To detach from the Hotbox</h2>
+        <ol>
+        <li><code>ctrl+b c</code> to open a new Tmux window (needed to detach).</li>
+        <li><code>ctrl+h</code> to detach the docker to the background of your server</li>
+        </ol>
+        <h2 id="to-enter-the-hotbox">To enter the Hotbox</h2>
+        <ol>
+        <li><code>./run.sh</code> (after typing this it may look like it hangs. Just press enter and you will see the docker prompt.)</li>
+        <li>If it looks like it hangs, if so just press enter to view the prompt</li>
+        </ol>
+        <h2 id="check-if-hotbox-is-running">Check if Hotbox is Running</h2>
+        <ul>
+        <li><code>docker container ps -a</code>.</li>
+        <li>You should see something like:<ul>
+        <li><code>8753ea10189a jrswab/hotbox &quot;/bin/bash&quot; 22 minutes ago Up 22 minutes ...</code></li>
+        <li>If you see the word &quot;exited&quot; your Hotbox is not running. To restart, run:<ul>
+        <li><code>docker rm hotbox</code></li>
+        <li><code>run.sh</code></li>
+        </ul>
+        </li>
+        </ul>
+        </li>
+        </ul>
+    </body>
+    <footer>
+        <p>Source code for the Docker container can be found at <a href="https://gitlab.com/jrswab/hotbox-dev" target="_blank">gitlab.com/jrswab/hotbox-dev</a></p>
+    </footer>
+</html>

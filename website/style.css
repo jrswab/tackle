@@ -1,0 +1,30 @@
+html {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    font-size: 18px;
+    color: #2E3440;
+    background-color: #ECEFF4;
+}
+
+body {
+    max-width: 1080px;
+}
+
+code {
+    background: #D8DEE9;
+    border: #2E3440 dashed 1px;
+    padding: 4px
+}
+
+ol, ul {
+    line-height: 32px;
+}
+
+a {
+    color: #5E81AC
+}
+
+a :visited {
+    color: #81A1C1;
+}

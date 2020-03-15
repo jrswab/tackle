@@ -1,0 +1,206 @@
+
+<!doctype html>
+<html>
+    <head>
+        <title>
+            Hotbox for Smoke.io
+        </title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <img src="logo.png" width="100px" />
+    <body>
+        <h1 id="hotbox-version-2-0">Hotbox Version 2.0</h1>
+        <p>The goal of this project is to make running a witness for smoke.io more predictable and reliable.</p>
+        <p>If you have any ideas on how to make this better please let me know or submit a pull request.</p>
+        <h2 id="contents-">Contents:</h2>
+        <ul>
+        <li><a href="new.html">Starting a New Witness</a></li>
+        <li><a href="updating.html">Update a Current Hotbox</a></li>
+        <li><a href="mirgate.html">Move a Non-Hotbox Witness to the Hotbox</a></li>
+        </ul>
+        <h2 id="starting-up-a-new-witness">Starting up a new witness</h2>
+        <p>
+            Jump to a section:
+            <ul>
+                <li><a href="#pre-hotbox-server-setup">Pre-Hotbox Server Setup</a></li>
+                <li><a href="#installing-the-hotbox">Installing the Hotbox</a></li>
+                <li><a href="#to-detach-from-the-hotbox">Detaching From the Hotbox</a></li>
+                <li><a href="#to-enter-the-hotbox">To enter the Hotbox</a></li>
+                <li><a href="#check-if-hotbox-is-running">Check to make sure the Hotbox is running</a></li>
+            </ul>
+        </p>
+        <p>A video walkthrough can be found on <a href="https://www.bitchute.com/video/7E6cl7p1uTmt/">bitchute</a>.
+        The video and the walkthrough below assume you are using Ubuntu.
+        If at anytime while using this guide, these instructions are unclear or you get stuck please message me on Discord.
+        You can find be me in the <a href="https://discord.gg/MpJH3qq">smoke.io Discord group</a> as &quot;J. R. Swab&quot;.
+        If you are on Windows <a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank">download Putty</a> to connect to your server.
+        </p>
+        <h3 id="pre-hotbox-server-setup-">Pre-Hotbox Server Setup:</h3>
+        <h4 id="as-the-root-user-">As The Root User:</h4>
+        <ol>
+        <li>Change Root Password:<ul>
+        <li>Trust no one. Even your hosting service.</li>
+        <li>Run: <code>passwd</code></li>
+        </ul>
+        </li>
+        <li>Update your server:<ul>
+        <li><code>apt-get update</code></li>
+        <li><code>apt-get upgrade</code></li>
+        </ul>
+        </li>
+        <li>Install a Firewall<ul>
+        <li><code>apt-get install ufw</code></li>
+        <li><code>ufw allow ssh</code></li>
+        <li><code>ufw allow 2001</code> - Smoked uses this port</li>
+        <li><code>ufw allow 8090</code> - Smoked uses this port</li>
+        <li><code>ufw deny http</code></li>
+        <li><code>ufw deny https</code></li>
+        <li><code>ufw default deny incoming</code></li>
+        <li><code>ufw default allow outgoing</code></li>
+        <li><code>ufw limit OpenSSH</code> - Helps prevent brute force attacks</li>
+        <li><code>ufw enable</code></li>
+        </ul>
+        </li>
+        <li>Open a new terminal or putty session</li>
+        <li>Try to login again to make sure you are not locked out.</li>
+        <li>Create user (replace new_username with something else):<ul>
+        <li><code># adduser new_username</code></li>
+        </ul>
+        </li>
+        <li>Add your new_username to the SUDO group:<ul>
+        <li><code># usermod -a -G sudo new_username</code></li>
+        </ul>
+        </li>
+        <li>Create a password for the new user:<ul>
+        <li><code># passwd new_user</code></li>
+        </ul>
+        </li>
+        <li>Set up Docker group and add your new user:<ul>
+        <li><code>sudo groupadd docker</code></li>
+        <li><code>sudo usermod -aG docker new_username</code></li>
+        </ul>
+        </li>
+        <li>Open a new terminal or putty session</li>
+        <li>Login with your new username and password.<ul>
+        <li>If successful only use this user from now on.</li>
+        </ul>
+        </li>
+        </ol>
+        <h4 id="as-your-created-user-">As Your Created User:</h4>
+        <ol>
+        <li>Disable Root Login (optional but recomended):<ul>
+        <li><code>sudo nano /ect/ssh/sshd_config</code></li>
+        <li>Change &quot;PermitRootLogin&quot; to no.</li>
+        </ul>
+        </li>
+        <li>Update Your Shared Memory:<ul>
+        <li><code>sudo nano /etc/fstab</code></li>
+        <li>At the bottom add: <code>tmpfs /run/shm tmpfs defaults,noexec,nosuid 0 0</code></li>
+        <li>Save the file.</li>
+        <li>Reboot: <code>sudo reboot now</code></li>
+        </ul>
+        </li>
+        <li>Once the server is rebooted log back in as your created user.</li>
+        <li>Install Git<ul>
+        <li>Ubuntu <code>sudo apt-get install git</code></li>
+        </ul>
+        </li>
+        <li>Install Docker<ul>
+        <li><a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">Use the official instructions from Docker</a></li>
+        </ul>
+        </li>
+        </ol>
+        <h3 id="installing-the-hotbox-">Installing the Hotbox:</h3>
+        <p>!You need to run the following commands as the user you created above</p>
+        <p>!Do not run these as root or else the Hotbox will not have access to the files it needs</p>
+        <ol>
+        <li><code>cd</code></li>
+        <li><code>mkdir hotbox</code></li>
+        <li><code>cd hotbox</code></li>
+        <li><code>git init</code></li>
+        <li>Clone the Hotbox Git repository: <code>git pull https://gitlab.com/jrswab/hotbox</code></li>
+        <li><code>cd hotbox</code></li>
+        <li><code>docker pull jrswab/hotbox</code></li>
+        <li><code>./run.sh</code><ul>
+        <li>To specify ports just add them directly after run.sh eg. <code>./run.sh 20001 28090</code></li>
+        <li>If no ports are specified the script will expose port 2001 to 20001 and port 8090 to 28090.</li>
+        </ul>
+        </li>
+        <li><code>./wallet.sh</code></li>
+        <li><code>set_password *PickPassphrase*</code></li>
+        <li><code>unlock &lt;password set with set_password&gt;</code></li>
+        <li><code>import_key *Your Smoke Private Active Key*</code></li>
+        <li><code>suggest_brain_key</code><ul>
+        <li>This will give you three keys. A private brain key (all words), a private WIF, and a Public WIF in that order from top to bottom.</li>
+        <li>Save these in a safe place. If you can I recommend encrypting them.</li>
+        </ul>
+        </li>
+        <li><code>import_key *Private WIF*</code><ul>
+        <li>Use the private WIF from the suggested brain key command above.</li>
+        </ul>
+        </li>
+        <li><code>ctrl+b</code> <code>c</code> to open a new Tmux window</li>
+        <li><code>./config.sh</code><ul>
+        <li>Vim is also included in the Docker if you prefer that editor. Use <code>./config.sh vim</code></li>
+        </ul>
+        </li>
+        <li>Find the line that says <code>#witness =</code><ul>
+        <li>remove the <code>#</code> and add your Smoke username</li>
+        <li>eg. witness = &quot;jrswab&quot;</li>
+        <li>Quotes are required.</li>
+        </ul>
+        </li>
+        <li>Find the line that says <code>#private-key =</code><ul>
+        <li>remove the # and add your private WIF we got from the wallet in step 10.</li>
+        <li>eg. <code>private-key = xxxxxxxxxxxxxxxx</code></li>
+        <li>No quotes around the key.</li>
+        </ul>
+        </li>
+        <li>Save and exit the config<ul>
+        <li>In nano: ctrl + x then y to save the press enter to execute.</li>
+        </ul>
+        </li>
+        <li><code>./smoked.sh</code><ul>
+        <li>Now the witness is running. Wait until you see <code>handled block ] Got 1 transactions on block</code> showing on the screen. Once you see them you can now enable your witness.</li>
+        </ul>
+        </li>
+        <li><code>ctrl+b 0</code> to go back to the screen with your wallet.</li>
+        <li><code>update_witness &quot;username&quot; &quot;url&quot; &quot;Public Key&quot; {} true</code><ul>
+        <li>Replace username and url with your information.</li>
+        <li>The &quot;Public Key&quot; is the public key we got from the wallet in step 10.</li>
+        <li>Copy and paste the command into the CLI_Wallet.</li>
+        <li>Wait for it to broadcast. You will see some yellow words scroll by and then a group of grayish-white text.</li>
+        </ul>
+        </li>
+        </ol>
+        <p>Now you can go back to the feed with <code>ctrl+b 1</code> to see the blocks!
+        Congrats! You are a witness now!</p>
+
+        <h2 id="to-detach-from-the-hotbox">To detach from the Hotbox</h2>
+        <ol>
+        <li><code>ctrl+b c</code> to open a new Tmux window (needed to detach).</li>
+        <li><code>ctrl+h</code> to detach the docker to the background of your server</li>
+        </ol>
+        <h2 id="to-enter-the-hotbox">To enter the Hotbox</h2>
+        <ol>
+        <li><code>./run.sh</code> (after typing this it may look like it hangs. Just press enter and you will see the docker prompt.)</li>
+        <li>If it looks like it hangs, if so just press enter to view the prompt</li>
+        </ol>
+        <h2 id="check-if-hotbox-is-running">Check if Hotbox is Running</h2>
+        <ul>
+        <li><code>docker container ps -a</code>.</li>
+        <li>You should see something like:<ul>
+        <li><code>8753ea10189a jrswab/hotbox &quot;/bin/bash&quot; 22 minutes ago Up 22 minutes ...</code></li>
+        <li>If you see the word &quot;exited&quot; your Hotbox is not running. To restart, run:<ul>
+        <li><code>docker rm hotbox</code></li>
+        <li><code>run.sh</code></li>
+        </ul>
+        </li>
+        </ul>
+        </li>
+        </ul>
+    </body>
+    <footer>
+        <p>Source code for the Docker container can be found at <a href="https://gitlab.com/jrswab/hotbox-dev" target="_blank">gitlab.com/jrswab/hotbox-dev</a></p>
+    </footer>
+</html>
