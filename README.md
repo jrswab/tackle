@@ -1,5 +1,5 @@
-# Tackle Version
-The goal of this project is to make running a witness for the Whaleshares more predictable and reliable.
+# Tackle
+The goal of this project is to make running a witness, RPC, or Seed node for Whaleshares easier so anyone can support the blockchain.
 
 If you have any ideas on how to make this better please let me know or submit a pull request.
 
