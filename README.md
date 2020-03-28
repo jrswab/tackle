@@ -1,3 +1,6 @@
+All future development can be fount at [git.sr.ht/~jrswab/tackle](https://git.sr.ht/~jrswab/Tackle).
+
+___
 # Tackle
 The goal of this project is to make running a witness, RPC, or Seed node for Whaleshares easier so anyone can support the blockchain.
 
