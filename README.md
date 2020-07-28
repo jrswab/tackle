@@ -1,4 +1,4 @@
-All future development can be fount at [git.sr.ht/~jrswab/tackle](https://git.sr.ht/~jrswab/Tackle).
+All future development can be found at [gitlab.com/grafiti/tackle](https://gitlab.com/grafiti/tackle).
 
 ___
 # Tackle
